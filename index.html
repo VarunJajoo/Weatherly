@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html>
+    
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+<head>
+  <title>Weatherly</title>
+
+  <style>
+    /*
+#expand.box:hover{
+    transform: scaleX(5) scaleY(1.8) translate(-2rem, 3rem);
+    border-radius: 0px;
+    filter: brightness(110%);
+    z-index: 10;
+}
+/*
+.btn--next:active ~ .section__content{
+    background-color: red;
+}
+*/
+
+    .search {
+      display: flex;
+      align-items: center;
+    }
+
+    .search_input {
+      width: 15rem;
+      height: 2rem;
+      border-radius: 500px;
+      text-decoration: none;
+      border: 1px solid #fff;
+      margin-right: 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      color: #fff;
+      outline: none;
+      background-color: transparent;
+      font-size: 16px;
+      font-family: "Montserrat", "Roboto", "Droid Sans", "Helvetica Neue", sans-serif;
+      font-weight: 300;
+      transition: all 0.6s ease;
+    }
+
+    .search_input:focus {
+      border: none;
+      border-style: none;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      width: 18rem;
+    }
+
+    .search_input:hover {
+      width: 18rem;
+    }
+
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      height: 100%;
+      overflow: hidden;
+      color: #fff;
+      background-color: #121519;
+      font-family: "Montserrat", "Roboto", "Droid Sans", "Helvetica Neue", sans-serif;
+    }
+
+    ul,
+    ol {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    p {
+      margin: 1rem 0;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: 4rem 1fr 4rem;
+      grid-template-columns: 20% 1fr;
+      height: 100vh;
+    }
+
+    .header,
+    .footer {
+      font-size: 0.75rem;
+      font-weight: 200;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #a0a0a0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      grid-column: 1/-1;
+      padding: 0 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header__left,
+    .header__right {
+      display: flex;
+      align-items: center;
+    }
+
+    .main {
+      grid-column: 1/-1;
+      padding: 2rem;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      perspective: 1px;
+      -ms-scroll-snap-type: block proximity;
+      scroll-snap-type: block proximity;
+      -ms-scroll-snap-destination: 0% 100%;
+      scroll-snap-destination: 0% 100%;
+      -ms-scroll-snap-points-y: repeat(100%);
+      scroll-snap-points-y: repeat(100%);
+    }
+
+    @media screen and (min-width: 1024px) {
+      .main {
+        grid-column: 2/-1;
+      }
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      grid-column: 1/-1;
+      padding: 0 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer p {
+      margin-right: 1rem;
+    }
+
+    .footer a {
+      color: #fff;
+    }
+
+    .footer a:hover,
+    .footer a:focus {
+      text-decoration: underline;
+    }
+
+    .footer__more {
+      display: none;
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    @media screen and (min-width: 768px) {
+      .footer__more {
+        display: block;
+      }
+    }
+
+    .nav {
+      display: none;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav__item:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav__link {
+      display: block;
+      color: #fff;
+      font-weight: 200;
+    }
+
+    .nav__link:hover,
+    .nav__link:focus {
+      background-color: rgba(255, 255, 255, 0.035);
+    }
+
+    @media screen and (min-width: 1024px) {
+      .nav {
+        display: block;
+        grid-column: 1/2;
+      }
+    }
+
+    .section {
+      min-height: 500px;
+      min-height: calc(100vh - 4rem - 4rem);
+      padding-top: 300px;
+      margin-bottom: 250px;
+      position: relative;
+      transform-style: preserve-3d;
+      scroll-snap-align: start;
+    }
+
+    .section__header {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      height: 500px;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      text-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .section__header::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+    }
+
+    .section__title {
+      font-size: 3.5rem;
+      font-weight: 200;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .section__subtitle {
+      font-size: 1.5rem;
+    }
+
+    .section__controls {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      padding: 0 2rem;
+      top: 0;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    .section__content {
+      position: relative;
+      z-index: 1;
+      padding: 0 1rem;
+      /*animation: slide 5s ease;*/
+    }
+
+    @media screen and (min-width: 1024px) {
+      .section {
+        margin-bottom: 750px;
+      }
+
+      .section__header {
+        transform: translateZ(-1px) scale(1.9);
+      }
+
+      .section__content {
+        padding: 0;
+        transform: translateZ(0);
+      }
+    }
+
+    .boxgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-auto-rows: minmax(150px, auto);
+      grid-gap: 2rem 0.5rem;
+    }
+
+    .boxgrid__item {
+      display: flex;
+    }
+
+    .boxgrid__item--wide {
+      grid-column: span 2;
+    }
+
+    @media screen and (min-width: 1280px) {
+      .boxgrid__item--push {
+        grid-column: span 2;
+        padding-left: 50%;
+      }
+    }
+
+    .box {
+      display: flex;
+      flex: 1 0 0;
+      position: relative;
+      padding: 2rem 1.3rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      color: #fff;
+      box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+      transform: scale(1);
+      transition: all 0.25s ease;
+      filter: brightness(100%);
+    }
+
+    .box:hover,
+    .box:focus {
+      transform: scale(1.07);
+      filter: brightness(110%);
+      z-index: 10;
+    }
+
+    .box--weather {
+      background-color: #49e6e9;
+    }
+
+    .box--description {
+      background-color: #e548eb;
+    }
+
+    .box--cost {
+      background-color: #41adff;
+    }
+
+    .box--locations {
+      background-color: #545ee7;
+    }
+
+    .box--humid {
+      background-color: #53f769;
+    }
+
+    .box--minMax {
+      background-color: #702fe9;
+    }
+
+    .box--uvi {
+      background-color: #e62861;
+    }
+
+    .box--image,
+    .box--video {
+      padding: 0;
+    }
+
+    .box--video::before,
+    .box--video::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 10;
+      transform: translate(-50%, -50%);
+    }
+
+    .box--video::before {
+      width: 50px;
+      height: 50px;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 38px rgba(0, 0, 0, 0.3);
+    }
+
+    .box--video::after {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 10px 0 10px 15px;
+      border-color: transparent transparent transparent #121519;
+      margin-left: 2px;
+    }
+
+    .box__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      -o-object-fit: cover;
+      object-fit: cover;
+      -o-object-position: center;
+      object-position: center;
+      border-radius: 0.5rem;
+    }
+
+    .scrollctrl {
+      display: none;
+      justify-content: center;
+      width: 50vw;
+      height: 50vw;
+      padding: 0;
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+      background-color: transparent;
+      left: 50%;
+      margin-left: -25%;
+    }
+
+    .scrollctrl:hover,
+    .scrollctrl:focus {
+      background-color: rgba(255, 255, 255, 0.035);
+    }
+
+    .scrollctrl--prev {
+      top: 0;
+      padding-top: 44%;
+      align-items: flex-end;
+      transform: translateY(-42vw);
+    }
+
+    .scrollctrl--next {
+      bottom: 0;
+      padding-bottom: 44%;
+      transform: translateY(42vw);
+    }
+
+    @media screen and (min-width: 1024px) {
+      .scrollctrl {
+        display: flex;
+      }
+    }
+
+    .text--large {
+      font-size: 2rem;
+      font-weight: 200;
+    }
+
+    .arrow {
+      display: inline-block;
+      padding: 3px;
+      border-style: solid;
+      border-width: 0 2px 2px 0;
+    }
+
+    .arrow--large {
+      padding: 8px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .arrow--right {
+      transform: rotate(-45deg);
+    }
+
+    .arrow--left {
+      transform: rotate(135deg);
+    }
+
+    .arrow--up {
+      transform: rotate(-135deg);
+    }
+
+    .arrow--down {
+      transform: rotate(45deg);
+    }
+
+    .media {
+      display: flex;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .media__img {
+      width: 60px;
+      height: 60px;
+      margin-right: 1rem;
+      border-radius: 0.25rem;
+      -o-object-position: center center;
+      object-position: center center;
+      -o-object-fit: cover;
+      object-fit: cover;
+    }
+
+    .media__content {
+      margin: 0;
+    }
+
+    .user {
+      margin-left: auto;
+      text-align: center;
+      padding-top: 2rem;
+    }
+
+    .user__name {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 200;
+    }
+
+    .user__img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 0 38px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn {
+      display: flex;
+      flex: 0 0 50px;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      border: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 50%;
+      background-color: #fff;
+      margin: 0 0.5rem;
+    }
+
+    button:focus {
+      outline: 0;
+      border-color: #66aee5;
+      box-shadow: 0 0 0 1px #66aee5;
+    }
+
+
+
+
+
+    /************************************************************************************************/
+
+
+
+
+
+
+    .icon {
+      position: relative;
+      display: inline-block;
+      width: 12em;
+      height: 10em;
+      font-size: 1em;
+      /* control icon size here */
+    }
+
+    .cloud {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+      width: 3.6875em;
+      height: 3.6875em;
+      margin: -1.84375em;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        -2.1875em 0.6875em 0 -0.6875em,
+        2.0625em 0.9375em 0 -0.9375em,
+        0 0 0 0.375em #fff,
+        -2.1875em 0.6875em 0 -0.3125em #fff,
+        2.0625em 0.9375em 0 -0.5625em #fff;
+    }
+
+    .cloud:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -0.5em;
+      display: block;
+      width: 4.5625em;
+      height: 1em;
+      background: #fff;
+      box-shadow: 0 0.4375em 0 -0.0625em #fff;
+    }
+
+    .cloud:nth-child(2) {
+      z-index: 0;
+      background: #fff;
+      box-shadow:
+        -2.1875em 0.6875em 0 -0.6875em #fff,
+        2.0625em 0.9375em 0 -0.9375em #fff,
+        0 0 0 0.375em #fff,
+        -2.1875em 0.6875em 0 -0.3125em #fff,
+        2.0625em 0.9375em 0 -0.5625em #fff;
+      opacity: 0.3;
+      transform: scale(0.5) translate(6em, -3em);
+      animation: cloud 4s linear infinite;
+    }
+
+    .cloud:nth-child(2):after {
+      background: #fff;
+    }
+
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2.5em;
+      height: 2.5em;
+      margin: -1.25em;
+      background: transparent;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0.375em #fff;
+      animation: spin 12s infinite linear;
+    }
+
+    .rays {
+      position: absolute;
+      top: -2em;
+      left: 50%;
+      display: block;
+      width: 0.375em;
+      height: 1.125em;
+      margin-left: -0.1875em;
+      background: #fff;
+      border-radius: 0.25em;
+      box-shadow: 0 5.375em #fff;
+    }
+
+    .rays:before,
+    .rays:after {
+      content: '';
+      position: absolute;
+      top: 0em;
+      left: 0em;
+      display: block;
+      width: 0.375em;
+      height: 1.125em;
+      transform: rotate(60deg);
+      transform-origin: 50% 3.25em;
+      background: #fff;
+      border-radius: 0.25em;
+      box-shadow: 0 5.375em #fff;
+    }
+
+    .rays:before {
+      transform: rotate(120deg);
+    }
+
+    .cloud+.sun {
+      margin: -2em 1em;
+    }
+
+    .rain,
+    .lightning,
+    .snow {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      width: 3.75em;
+      height: 3.75em;
+      margin: 0.375em 0 0 -2em;
+      background: transparent;
+    }
+
+    .rain:after {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      width: 1.125em;
+      height: 1.125em;
+      margin: -1em 0 0 -0.25em;
+      background: #0cf;
+      border-radius: 100% 0 60% 50% / 60% 0 100% 50%;
+      box-shadow:
+        0.625em 0.875em 0 -0.125em rgba(255, 255, 255, 0.2),
+        -0.875em 1.125em 0 -0.125em rgba(255, 255, 255, 0.2),
+        -1.375em -0.125em 0 rgba(255, 255, 255, 0.2);
+      transform: rotate(-28deg);
+      animation: rain 3s linear infinite;
+    }
+
+    .bolt {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -0.25em 0 0 -0.125em;
+      color: #fff;
+      opacity: 0.3;
+      animation: lightning 2s linear infinite;
+    }
+
+    .bolt:nth-child(2) {
+      width: 0.5em;
+      height: 0.25em;
+      margin: -1.75em 0 0 -1.875em;
+      transform: translate(2.5em, 2.25em);
+      opacity: 0.2;
+      animation: lightning 1.5s linear infinite;
+    }
+
+    .bolt:before,
+    .bolt:after {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      margin: -1.625em 0 0 -1.0125em;
+      border-top: 1.25em solid transparent;
+      border-right: 0.75em solid;
+      border-bottom: 0.75em solid;
+      border-left: 0.5em solid transparent;
+      transform: skewX(-10deg);
+    }
+
+    .bolt:after {
+      margin: -0.25em 0 0 -0.25em;
+      border-top: 0.75em solid;
+      border-right: 0.5em solid transparent;
+      border-bottom: 1.25em solid transparent;
+      border-left: 0.75em solid;
+      transform: skewX(-10deg);
+    }
+
+    .bolt:nth-child(2):before {
+      margin: -0.75em 0 0 -0.5em;
+      border-top: 0.625em solid transparent;
+      border-right: 0.375em solid;
+      border-bottom: 0.375em solid;
+      border-left: 0.25em solid transparent;
+    }
+
+    .bolt:nth-child(2):after {
+      margin: -0.125em 0 0 -0.125em;
+      border-top: 0.375em solid;
+      border-right: 0.25em solid transparent;
+      border-bottom: 0.625em solid transparent;
+      border-left: 0.375em solid;
+    }
+
+    .flake:before,
+    .flake:after {
+      content: '\2744';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -1.025em 0 0 -1.0125em;
+      color: #fff;
+      list-height: 1em;
+      opacity: 0.2;
+      animation: spin 8s linear infinite reverse;
+    }
+
+    .flake:after {
+      margin: 0.125em 0 0 -1em;
+      font-size: 1.5em;
+      opacity: 0.4;
+      animation: spin 14s linear infinite;
+    }
+
+    .flake:nth-child(2):before {
+      margin: -0.5em 0 0 0.25em;
+      font-size: 1.25em;
+      opacity: 0.2;
+      animation: spin 10s linear infinite;
+    }
+
+    .flake:nth-child(2):after {
+      margin: 0.375em 0 0 0.125em;
+      font-size: 2em;
+      opacity: 0.4;
+      animation: spin 16s linear infinite reverse;
+    }
+
+
+    /* Animations */
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes cloud {
+      0% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.5) translate(-200%, -3em);
+      }
+    }
+
+    @keyframes rain {
+      0% {
+        background: #0cf;
+        box-shadow:
+          0.625em 0.875em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -0.875em 1.125em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -1.375em -0.125em 0 #0cf;
+      }
+
+      25% {
+        box-shadow:
+          0.625em 0.875em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -0.875em 1.125em 0 -0.125em #0cf,
+          -1.375em -0.125em 0 rgba(255, 255, 255, 0.2);
+      }
+
+      50% {
+        background: rgba(255, 255, 255, 0.3);
+        box-shadow:
+          0.625em 0.875em 0 -0.125em #0cf,
+          -0.875em 1.125em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -1.375em -0.125em 0 rgba(255, 255, 255, 0.2);
+      }
+
+      100% {
+        box-shadow:
+          0.625em 0.875em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -0.875em 1.125em 0 -0.125em rgba(255, 255, 255, 0.2),
+          -1.375em -0.125em 0 #0cf;
+      }
+    }
+
+    @keyframes lightning {
+      45% {
+        color: #fff;
+        background: #fff;
+        opacity: 0.2;
+      }
+
+      50% {
+        color: #0cf;
+        background: #0cf;
+        opacity: 1;
+      }
+
+      55% {
+        color: #fff;
+        background: #fff;
+        opacity: 0.2;
+      }
+    }
+
+    @keyframes slide-left {
+      20% {
+        transform: translateX(-80rem);
+      }
+
+      21% {
+        opacity: 0%;
+        transform: translateX(80rem);
+      }
+
+      25% {
+        opacity: 100%;
+      }
+
+      40% {
+        visibility: visible;
+        transform: translateX(0rem);
+      }
+    }
+
+    @keyframes slide-right {
+      20% {
+        transform: translateX(80rem);
+      }
+
+      21% {
+        opacity: 0%;
+        transform: translateX(-80rem);
+      }
+
+      25% {
+        opacity: 100%;
+      }
+
+      40% {
+        visibility: visible;
+        transform: translateX(0rem);
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="demo"></div>
+
+  <div class="app">
+
+    <header class="header">
+      <div class="header__left">
+        <span>Weatherly</span>
+      </div>
+      <div class="search">
+        <input class="search_input" type="text" placeholder="San fransisco" onkeydown="search(this)" />
+      </div>
+      <div class="header__right">
+        <p id="time">Thu, 14 Jun | 16:20</p>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <ul class="nav__menu">
+        <li class="nav__item">
+          <a href="#scroll-1" class="nav__link" data-scroll-to>
+            <div class="media">
+              <img id="nav-1" alt="" class="media__img">
+              <p id="nav-city1" class="media__content">
+                <strong>New York</strong><br />
+                USA
+              </p>
+            </div>
+          </a>
+        </li>
+        <li class="nav__item">
+          <a href="#scroll-2" class="nav__link" data-scroll-to>
+            <div class="media">
+              <img id="nav-2" alt="" class="media__img">
+              <p id="nav-city2" class="media__content">
+                <strong>Lisbon</strong><br />
+                Portugal
+              </p>
+            </div>
+          </a>
+        </li>
+        <li class="nav__item">
+          <a href="#scroll-3" class="nav__link" data-scroll-to>
+            <div class="media">
+              <img id="nav-3" alt="" class="media__img">
+              <p id="nav-city3" class="media__content">
+                <strong>Vienna</strong><br />
+                Austria
+              </p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main">
+
+      <article class="section" id="scroll-1" data-section>
+        <header id="header-1" class="section__header">
+          <h1 id="title1" class="section__title">New York</h1>
+          <p id="coordinate1" class="section__subtitle">40.42°N, 74.02°W</p>
+          <p id="page_date1"></p>
+
+          <div id="controls1" class="section__controls">
+            <button id="btn--prev1" class="btn btn--prev" title="Previous">
+              <span class="arrow arrow--left"></span>
+            </button>
+            <button id="btn--next1" class="btn btn--next" title="Next">
+              <span class="arrow arrow--right"></span>
+            </button>
+            <div id="user1" class="user">
+              <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+              <div class="icon cloudy">
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div id="section__content1" class="section__content">
+          <ul class="boxgrid">
+            <li class="boxgrid__item">
+              <a href="#" class="box box--weather">
+                <p id="temp1"><span class="text--large">30°C</span><br />Sunny
+                </p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--description">
+                <p id="description1" class="text--large"></p>
+                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" id="expand" class="box box--cost">
+                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                <p><span id="pressure1" class="text--large"></span><br />Pressure</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--uvi">
+                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                <p id="uvi1"></p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--locations">
+                <p><span id="wind1" class="text--large"></span><br />Wind speed</p>
+              </a>
+            </li>
+            <li class="boxgrid__item">
+              <a href="#" class="box box--humid">
+                <p><span id="humid1" class="text--large"></span><br />Humidity</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--minMax">
+                <p><span id="max-min-1" class="text--large"></span><br>Max / Min temp</p>
+                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+              </a>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="section" id="scroll-2" data-section>
+        <header id="header-2" class="section__header">
+          <h1 id="title2" class="section__title">New York</h1>
+          <p id="coordinate2" class="section__subtitle">40.42°N, 74.02°W</p>
+          <p id="page_date2"></p>
+
+          <div id="controls2" class="section__controls">
+            <button id="btn--prev2" class="btn btn--prev" title="Previous">
+              <span class="arrow arrow--left"></span>
+            </button>
+            <button id="btn--next2" class="btn btn--next" title="Next">
+              <span class="arrow arrow--right"></span>
+            </button>
+            <div id="user2" class="user">
+              <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+              <div class="icon cloudy">
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div id="section__content2" class="section__content">
+          <ul class="boxgrid">
+            <li class="boxgrid__item">
+              <a href="#" class="box box--weather">
+                <p id="temp2"><span class="text--large">30°C</span><br />Sunny
+                </p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--description">
+                <p id="description2" class="text--large"></p>
+                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" id="expand" class="box box--cost">
+                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                <p><span id="pressure2" class="text--large"></span><br />Pressure</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--uvi">
+                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                <p id="uvi2"></p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--locations">
+                <p><span id="wind2" class="text--large"></span><br />Wind speed</p>
+              </a>
+            </li>
+            <li class="boxgrid__item">
+              <a href="#" class="box box--humid">
+                <p><span id="humid2" class="text--large"></span><br />Humidity</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--minMax">
+                <p><span id="max-min-2" class="text--large"></span><br>Max / Min temp</p>
+                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+              </a>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="section" id="scroll-3" data-section>
+        <header id="header-3" class="section__header">
+          <h1 id="title3" class="section__title">New York</h1>
+          <p id="coordinate3" class="section__subtitle">40.42°N, 74.02°W</p>
+          <p id="page_date3"></p>
+
+          <div id="controls3" class="section__controls">
+            <button id="btn--prev3" class="btn btn--prev" title="Previous">
+              <span class="arrow arrow--left"></span>
+            </button>
+            <button id="btn--next3" class="btn btn--next" title="Next">
+              <span class="arrow arrow--right"></span>
+            </button>
+            <div id="user3" class="user">
+              <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+              <div class="icon cloudy">
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div id="section__content3" class="section__content">
+          <ul class="boxgrid">
+            <li class="boxgrid__item">
+              <a href="#" class="box box--weather">
+                <p id="temp3"><span class="text--large">30°C</span><br />Sunny
+                </p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--description">
+                <p id="description3" class="text--large"></p>
+                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" id="expand" class="box box--cost">
+                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                <p><span id="pressure3" class="text--large"></span><br />Pressure</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--uvi">
+                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                <p id="uvi3"></p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--push">
+              <a href="#" class="box box--locations">
+                <p><span id="wind3" class="text--large"></span><br />Wind speed</p>
+              </a>
+            </li>
+            <li class="boxgrid__item">
+              <a href="#" class="box box--humid">
+                <p><span id="humid3" class="text--large"></span><br />Humidity</p>
+              </a>
+            </li>
+            <li class="boxgrid__item boxgrid__item--wide">
+              <a href="#" class="box box--minMax">
+                <p><span id="max-min-3" class="text--large"></span><br>Max / Min temp</p>
+                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+              </a>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+    </main>
+
+    <!--
+        <button class="scrollctrl scrollctrl--prev" data-scroll-dir="prev">
+            <span class="arrow arrow--large arrow--up"></span>
+        </button>
+        <button class="scrollctrl scrollctrl--next" data-scroll-dir="next">
+            <span class="arrow arrow--large arrow--down"></span>
+        </button>
+        -->
+
+    <footer class="footer">
+      <!--
+            <p>a pen by <a href="https://twitter.com/mxbck">@mxbck</a></p>
+            -->
+      <p>design and made by Vaibhav Sharma</p>
+
+      <p class="footer__more">
+        <a href="#" target="_blank" rel="noopener noreferrer">View Source</a>
+        &nbsp;&middot;&nbsp;
+        <a href="#">Read More</a>
+      </p>
+    </footer>
+  </div>
+
+
+</body>
+<script>
+  const SELECTORS = {
+    section: '[data-section]',
+    scrollTo: '[data-scroll-to]',
+    scrollDir: '[data-scroll-dir]'
+  }
+  const sectionsArray = Array.from(document.querySelectorAll(SELECTORS.section))
+  const scrollToElements = document.querySelectorAll(SELECTORS.scrollTo)
+  const scrollDirElements = document.querySelectorAll(SELECTORS.scrollDir)
+
+  let currentSectionIndex = 0
+
+  const getScrollTarget = dir => {
+    if (dir === 'prev' && currentSectionIndex > 0) {
+      currentSectionIndex--
+      return sectionsArray[currentSectionIndex]
+    }
+    if (dir === 'next' && currentSectionIndex < sectionsArray.length - 1) {
+      currentSectionIndex++
+      return sectionsArray[currentSectionIndex]
+    }
+    return false
+  }
+
+  scrollDirElements.forEach(el => {
+    el.addEventListener('click', () => {
+      const direction = el.dataset.scrollDir
+      const target = getScrollTarget(direction)
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    })
+  })
+
+  scrollToElements.forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault()
+      const targetId = el.getAttribute('href')
+      const target = document.querySelector(targetId)
+
+      if (target) {
+        sectionsArray.forEach((section, index) => {
+          if (section.id === targetId.replace('#', '')) {
+            currentSectionIndex = index
+          }
+        })
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    })
+  })
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  var d = new Date();
+  var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  document.getElementById("time").innerHTML = days[d.getDay()] + ", " + d.getDate() + " " + months[d.getMonth()] + " | " + d.getHours() + ":" + d.getMinutes();
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  var cityArray = ["London", "New york", "Egypt"];
+  loadAll(cityArray);
+
+  function loadAll(cityArray) {
+    for (var count = 0; count < 3; count++) {
+      getCityImage(cityArray[count], count + 1);
+      articleContent(cityArray[count], count + 1);
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  function getCityImage(query, position) {
+    var client_Id = "qBepQVwpNAEHCw4CkWknpSEgIXIVo57blqIB3Sf8Avg";
+    var url = "https://api.unsplash.com/search/photos/?client_id=" + client_Id + "&query=" + query;
+    var alternate_query = "scenery";
+    var result;
+
+    fetch(url)
+      .then(function (data) {
+        return data.json();
+      })
+      .then(function (data) {
+        console.log(data);
+
+        if (data.results[0] == null) {
+          //console.log("success");
+          url = "https://api.unsplash.com/search/photos/?client_id=" + client_Id + "&query=" + alternate_query;
+          fetch(url)
+            .then(function (data) {
+              return data.json();
+            })
+            .then(function (data) {
+              result = data.results[0].urls.regular;
+              document.getElementById("header-" + position).style.backgroundImage = "url('" + result + "')";
+              document.getElementById("nav-" + position).src = result;
+            });
+        }
+        else {
+          //console.log("fail");
+          result = data.results[0].urls.regular;
+          document.getElementById("header-" + position).style.backgroundImage = "url('" + result + "')";
+          document.getElementById("nav-" + position).src = result;
+        }
+      });
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  var url2;
+  var query1;
+  var client_Id1;
+  var url1;
+
+  function articleContent(query, position) {
+
+    document.getElementById("title" + position).innerHTML = query;
+
+    query1 = query;
+    client_Id1 = "963d97dd126caf827944adc35b8b4882";
+    url1 = "https://api.openweathermap.org/data/2.5/weather?q=" + query1 + "&appid=" + client_Id1;
+
+
+    fetch(url1)
+      .then(function (data1) {
+        return data1.json();
+      })
+      .then(function (data1) {
+        console.log(data1);
+
+        if (data1.cod == "404" || data1.name.toUpperCase().search(query.toUpperCase()) < 0) {
+          //console.log("City not found");
+          document.getElementById("title" + position).innerHTML = query + "'s weather not found";
+          document.getElementById("coordinate" + position).style.visibility = "hidden";
+          document.getElementById("controls" + position).style.visibility = "hidden";
+          document.getElementById("section__content" + position).style.visibility = "hidden";
+          document.getElementById("page_date" + position).style.visibility = "hidden";
+          document.getElementById("nav-city" + position).innerHTML = `<strong>` + "Weather not found" + `</strong>`;
+        }
+        else {
+          //console.log("found");
+
+          document.getElementById("coordinate" + position).style.visibility = "visible";
+          document.getElementById("controls" + position).style.visibility = "visible";
+          document.getElementById("section__content" + position).style.visibility = "visible";
+          document.getElementById("page_date" + position).style.visibility = "visible";
+
+          var lon = data1.coord.lon;
+          var lat = data1.coord.lat;
+          var lon_dir = "&deg;E";
+          var lat_dir = "&deg;N";
+          if (lon < 0) {
+            lon_dir = "&deg;W";
+            lon *= -1;
+          }
+          if (lat < 0) {
+            lat_dir = "&deg;S";
+            lat *= -1;
+          }
+
+          document.getElementById("nav-city" + position).innerHTML = `<strong>` + query + `</strong><br>` + data1.sys.country;
+
+          let unixTimestamp = data1.dt;
+          let dateObj = new Date(unixTimestamp * 1000);
+          let utcString = dateObj.toUTCString();
+          let day = utcString.slice(-29, -26);
+          let date = utcString.slice(-24, -22);
+          let month = utcString.slice(-21, -18);
+
+          document.getElementById("page_date" + position).innerHTML = day + ", " + date + " " + month;
+          document.getElementById("pressure" + position).innerHTML = data1.main.pressure + "hPa";
+          document.getElementById("temp" + position).innerHTML = `<span class="text--large">` + Math.round(data1.main.temp - 273) + "&deg;C" + `</span><br/>` + data1.weather[0].main;
+          document.getElementById("coordinate" + position).innerHTML = lat + lat_dir + ", " + lon + lon_dir;
+          document.getElementById("description" + position).innerHTML = data1.weather[0].description;
+          document.getElementById("wind" + position).innerHTML = Math.round(data1.wind.speed * 3.6) + "Km/h";
+          document.getElementById("humid" + position).innerHTML = data1.main.humidity + "%";
+          document.getElementById("max-min-" + position).innerHTML = Math.round(data1.main.temp_max - 273) + "&deg; / " + Math.round(data1.main.temp_min - 273) + "&deg;C";
+
+          if (data1.weather[0].main == "Haze" || data1.weather[0].main == "Clouds" || data1.weather[0].main == "Smoke") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon cloudy">
+                                                            <div class="cloud"></div>
+                                                            <div class="cloud"></div>
+                                                        </div>`;
+          }
+          if (data1.weather[0].main == "Rain") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon rainy">
+                                                            <div class="cloud"></div>
+                                                            <div class="rain"></div>
+                                                        </div>`;
+          }
+          //////////////////////////////////////////////////////////////////////////////
+          if (data1.weather[0].main == "Sunny" || data1.weather[0].main == "Clear") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon sunny">
+                                                            <div class="sun">
+                                                            <div class="rays"></div>
+                                                            </div>
+                                                        </div>`;
+          }
+          if (data1.weather[0].main == "Snow") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon flurries">
+                                                            <div class="cloud"></div>
+                                                            <div class="snow">
+                                                            <div class="flake"></div>
+                                                            <div class="flake"></div>
+                                                            </div>
+                                                        </div>`;
+          }
+          if (data1.weather[0].main == "Thunder" || data1.weather[0].main == "Extreme") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon thunder-storm">
+                                                            <div class="cloud"></div>
+                                                            <div class="lightning">
+                                                            <div class="bolt"></div>
+                                                            <div class="bolt"></div>
+                                                            </div>
+                                                        </div>`;
+          }
+          if (data1.weather[0].main == "Shower" || data1.weather[0].main == "Mist") {
+            document.getElementById("user" + position).innerHTML = `<div class="icon sun-shower">
+                                                            <div class="cloud"></div>
+                                                            <div class="sun">
+                                                            <div class="rays"></div>
+                                                            </div>
+                                                            <div class="rain"></div>
+                                                        </div>`;
+          }
+
+
+
+
+          url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,alerts&appid=" + client_Id1;
+          fetch(url2)
+            .then(function (data2) {
+              return data2.json();
+            })
+            .then(function (data2) {
+              //console.log(data2);
+              let uvi = data2.current.uvi;
+              let uvi_description = "";
+
+              if (uvi >= 0 && uvi <= 2) {
+                uvi_description = "Low";
+              }
+              if (uvi > 2 && uvi <= 5) {
+                uvi_description = "Moderate";
+              }
+              if (uvi > 5 && uvi <= 7) {
+                uvi_description = "High";
+              }
+              if (uvi > 7 && uvi <= 10) {
+                uvi_description = "Very high";
+              }
+              if (uvi > 10) {
+                uvi_description = "Extreme";
+              }
+              document.getElementById("uvi" + position).innerHTML = `<span class="text--large">` + uvi + `</span><br>UV index (` + uvi_description + `)`;
+            });
+        }
+      });
+
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////////
+
+
+  var pageCounter1 = 0;
+  var pageCounter2 = 0;
+  var pageCounter3 = 0;
+
+  document.getElementById('btn--next1').onclick = function () {
+    document.getElementById('section__content1').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content1').style.animation = "slide-left 3s ease";
+    }, 20);
+
+    if (pageCounter1 >= 0 && pageCounter1 < 6) {
+      pageCounter1++;
+    }
+    else {
+      pageCounter1 = 0;
+    }
+    update_page_on_scroll(1, pageCounter1);
+  };
+
+  document.getElementById('btn--prev1').onclick = function () {
+    document.getElementById('section__content1').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content1').style.animation = "slide-right 3s ease";
+    }, 20);
+
+    if (pageCounter1 > 0 && pageCounter1 <= 6) {
+      pageCounter1--;
+    }
+    else {
+      pageCounter1 = 6;
+    }
+    update_page_on_scroll(1, pageCounter1);
+  };
+
+  document.getElementById('btn--next2').onclick = function () {
+    document.getElementById('section__content2').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content2').style.animation = "slide-left 3s ease";
+    }, 20);
+
+    if (pageCounter2 >= 0 && pageCounter2 < 6) {
+      pageCounter2++;
+    }
+    else {
+      pageCounter2 = 0;
+    }
+    update_page_on_scroll(2, pageCounter2);
+  };
+
+  document.getElementById('btn--prev2').onclick = function () {
+    document.getElementById('section__content2').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content2').style.animation = "slide-right 3s ease";
+    }, 20);
+
+    if (pageCounter2 > 0 && pageCounter2 <= 6) {
+      pageCounter2--;
+    }
+    else {
+      pageCounter2 = 6;
+    }
+    update_page_on_scroll(2, pageCounter2);
+  };
+
+  document.getElementById('btn--next3').onclick = function () {
+    document.getElementById('section__content3').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content3').style.animation = "slide-left 3s ease";
+    }, 20);
+
+    if (pageCounter3 >= 0 && pageCounter3 < 6) {
+      pageCounter3++;
+    }
+    else {
+      pageCounter3 = 0;
+    }
+    update_page_on_scroll(3, pageCounter3);
+  };
+
+  document.getElementById('btn--prev3').onclick = function () {
+    document.getElementById('section__content3').style.animation = "none";
+    setTimeout(function () {
+      document.getElementById('section__content3').style.animation = "slide-right 3s ease";
+    }, 20);
+
+    if (pageCounter3 > 0 && pageCounter3 <= 6) {
+      pageCounter3--;
+    }
+    else {
+      pageCounter3 = 6;
+    }
+    update_page_on_scroll(3, pageCounter3);
+  };
+
+  function update_page_on_scroll(position, pageCounter) {
+
+    client_Id1 = "963d97dd126caf827944adc35b8b4882";
+    url1 = "https://api.openweathermap.org/data/2.5/weather?q=" + cityArray[position - 1] + "&appid=" + client_Id1;
+
+    fetch(url1)
+      .then(function (data1) {
+        return data1.json();
+      })
+      .then(function (data1) {
+        let url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + data1.coord.lat + "&lon=" + data1.coord.lon + "&exclude=minutely,alerts&appid=" + client_Id1;
+        fetch(url2)
+          .then(function (data2) {
+            return data2.json();
+          })
+          .then(function (data2) {
+            let uvi = data2.daily[pageCounter].uvi;
+            let uvi_description = "";
+
+            if (uvi >= 0 && uvi <= 2) {
+              uvi_description = "Low";
+            }
+            if (uvi > 2 && uvi <= 5) {
+              uvi_description = "Moderate";
+            }
+            if (uvi > 5 && uvi <= 7) {
+              uvi_description = "High";
+            }
+            if (uvi > 7 && uvi <= 10) {
+              uvi_description = "Very high";
+            }
+            if (uvi > 10) {
+              uvi_description = "Extreme";
+            }
+
+            var unixTimestamp = data2.daily[pageCounter].dt;
+            var dateObj = new Date(unixTimestamp * 1000);
+            var utcString = dateObj.toUTCString();
+            var day = utcString.slice(-29, -26);
+            var date = utcString.slice(-24, -22);
+            var month = utcString.slice(-21, -18);
+
+            document.getElementById("page_date" + position).innerHTML = day + ", " + date + " " + month;
+            document.getElementById("pressure" + position).innerHTML = data2.daily[pageCounter].pressure + "hPa";
+            document.getElementById("uvi" + position).innerHTML = `<span class="text--large">` + uvi + `</span><br>UV index (` + uvi_description + `)`;
+            document.getElementById("temp" + position).innerHTML = `<span class="text--large">` + Math.round(data2.daily[pageCounter].temp.day - 273) + "&deg;C" + `</span><br/>` + data2.daily[pageCounter].weather[0].main;
+            document.getElementById("description" + position).innerHTML = data2.daily[pageCounter].weather[0].description;
+            document.getElementById("wind" + position).innerHTML = Math.round(data2.daily[pageCounter].wind_speed * 3.6) + "Km/h";
+            document.getElementById("humid" + position).innerHTML = data2.daily[pageCounter].humidity + "%";
+            document.getElementById("max-min-" + position).innerHTML = Math.round(data2.daily[pageCounter].temp.max - 273) + "&deg; / " + Math.round(data2.daily[pageCounter].temp.min - 273) + "&deg;C";
+
+            if (data2.daily[pageCounter].weather[0].main == "Haze" || data2.daily[pageCounter].weather[0].main == "Clouds" || data2.daily[pageCounter].weather[0].main == "Smoke") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon cloudy">
+                                                                                <div class="cloud"></div>
+                                                                                <div class="cloud"></div>
+                                                                            </div>`;
+            }
+            if (data2.daily[pageCounter].weather[0].main == "Rain") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon rainy">
+                                                                                <div class="cloud"></div>
+                                                                                <div class="rain"></div>
+                                                                            </div>`;
+            }
+            //////////////////////////////////////////////////////////////////////////////
+            if (data2.daily[pageCounter].weather[0].main == "Sunny" || data2.daily[pageCounter].weather[0].main == "Clear") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon sunny">
+                                                                                <div class="sun">
+                                                                                <div class="rays"></div>
+                                                                                </div>
+                                                                            </div>`;
+            }
+            if (data2.daily[pageCounter].weather[0].main == "Snow") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon flurries">
+                                                                                <div class="cloud"></div>
+                                                                                <div class="snow">
+                                                                                <div class="flake"></div>
+                                                                                <div class="flake"></div>
+                                                                                </div>
+                                                                            </div>`;
+            }
+            if (data2.daily[pageCounter].weather[0].main == "Thunder" || data2.daily[pageCounter].weather[0].main == "Extreme") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon thunder-storm">
+                                                                                <div class="cloud"></div>
+                                                                                <div class="lightning">
+                                                                                <div class="bolt"></div>
+                                                                                <div class="bolt"></div>
+                                                                                </div>
+                                                                            </div>`;
+            }
+            if (data2.daily[pageCounter].weather[0].main == "Shower" || data2.daily[pageCounter].weather[0].main == "Mist") {
+              document.getElementById("user" + position).innerHTML = `<div class="icon sun-shower">
+                                                                                <div class="cloud"></div>
+                                                                                <div class="sun">
+                                                                                <div class="rays"></div>
+                                                                                </div>
+                                                                                <div class="rain"></div>
+                                                                            </div>`;
+            }
+
+          });
+      });
+  }
+
+
+  function search(element) {
+    if (event.key === 'Enter') {
+      var input = element.value.charAt(0).toUpperCase() + element.value.slice(1);
+      if (cityArray[0].toUpperCase() != input.toUpperCase()) {
+        cityArray = [input, cityArray[0], cityArray[1]];
+      }
+      loadAll(cityArray);
+      document.activeElement.blur();
+    }
+  }
+
+</script>
+
+</html>

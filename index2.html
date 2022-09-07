@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weatherly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="demo"></div>
+
+    <div class="app">
+
+        <header class="header">
+            <div class="header__left">
+                <span>Weatherly</span>
+            </div>
+            <div class="search">
+                <input class="search_input" type="text" placeholder="San fransisco" onkeydown="search(this)" />
+            </div>
+            <div class="header__right">
+                <p id="time">Thu, 14 Jun | 16:20</p>
+            </div>
+        </header>
+
+        <nav class="nav">
+            <ul class="nav__menu">
+                <li class="nav__item">
+                    <a href="#scroll-1" class="nav__link" data-scroll-to>
+                        <div class="media">
+                            <img id="nav-1" alt="" class="media__img">
+                            <p id="nav-city1" class="media__content">
+                                <strong>New York</strong><br />
+                                USA
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#scroll-2" class="nav__link" data-scroll-to>
+                        <div class="media">
+                            <img id="nav-2" alt="" class="media__img">
+                            <p id="nav-city2" class="media__content">
+                                <strong>Lisbon</strong><br />
+                                Portugal
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#scroll-3" class="nav__link" data-scroll-to>
+                        <div class="media">
+                            <img id="nav-3" alt="" class="media__img">
+                            <p id="nav-city3" class="media__content">
+                                <strong>Vienna</strong><br />
+                                Austria
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main">
+
+            <article class="section" id="scroll-1" data-section>
+                <header id="header-1" class="section__header">
+                    <h1 id="title1" class="section__title">New York</h1>
+                    <p id="coordinate1" class="section__subtitle">40.42°N, 74.02°W</p>
+                    <p id="page_date1"></p>
+
+                    <div id="controls1" class="section__controls">
+                        <button id="btn--prev1" class="btn btn--prev" title="Previous">
+                            <span class="arrow arrow--left"></span>
+                        </button>
+                        <button id="btn--next1" class="btn btn--next" title="Next">
+                            <span class="arrow arrow--right"></span>
+                        </button>
+                        <div id="user1" class="user">
+                            <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+                            <div class="icon cloudy">
+                                <div class="cloud"></div>
+                                <div class="cloud"></div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div id="section__content1" class="section__content">
+                    <ul class="boxgrid">
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--weather">
+                                <p id="temp1"><span class="text--large">30°C</span><br />Sunny
+                                </p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--description">
+                                <p id="description1" class="text--large"></p>
+                                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" id="expand" class="box box--cost">
+                                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                                <p><span id="pressure1" class="text--large"></span><br />Pressure</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--uvi">
+                                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                                <p id="uvi1"></p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--locations">
+                                <p><span id="wind1" class="text--large"></span><br />Wind speed</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--humid">
+                                <p><span id="humid1" class="text--large"></span><br />Humidity</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--minMax">
+                                <p><span id="max-min-1" class="text--large"></span><br>Max / Min temp</p>
+                                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="section" id="scroll-2" data-section>
+                <header id="header-2" class="section__header">
+                    <h1 id="title2" class="section__title">New York</h1>
+                    <p id="coordinate2" class="section__subtitle">40.42°N, 74.02°W</p>
+                    <p id="page_date2"></p>
+
+                    <div id="controls2" class="section__controls">
+                        <button id="btn--prev2" class="btn btn--prev" title="Previous">
+                            <span class="arrow arrow--left"></span>
+                        </button>
+                        <button id="btn--next2" class="btn btn--next" title="Next">
+                            <span class="arrow arrow--right"></span>
+                        </button>
+                        <div id="user2" class="user">
+                            <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+                            <div class="icon cloudy">
+                                <div class="cloud"></div>
+                                <div class="cloud"></div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div id="section__content2" class="section__content">
+                    <ul class="boxgrid">
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--weather">
+                                <p id="temp2"><span class="text--large">30°C</span><br />Sunny
+                                </p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--description">
+                                <p id="description2" class="text--large"></p>
+                                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" id="expand" class="box box--cost">
+                                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                                <p><span id="pressure2" class="text--large"></span><br />Pressure</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--uvi">
+                                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                                <p id="uvi2"></p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--locations">
+                                <p><span id="wind2" class="text--large"></span><br />Wind speed</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--humid">
+                                <p><span id="humid2" class="text--large"></span><br />Humidity</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--minMax">
+                                <p><span id="max-min-2" class="text--large"></span><br>Max / Min temp</p>
+                                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="section" id="scroll-3" data-section>
+                <header id="header-3" class="section__header">
+                    <h1 id="title3" class="section__title">New York</h1>
+                    <p id="coordinate3" class="section__subtitle">40.42°N, 74.02°W</p>
+                    <p id="page_date3"></p>
+
+                    <div id="controls3" class="section__controls">
+                        <button id="btn--prev3" class="btn btn--prev" title="Previous">
+                            <span class="arrow arrow--left"></span>
+                        </button>
+                        <button id="btn--next3" class="btn btn--next" title="Next">
+                            <span class="arrow arrow--right"></span>
+                        </button>
+                        <div id="user3" class="user">
+                            <!--
+                            <img src="https://source.unsplash.com/200x200/?nature" class="user__img" alt="" />
+                            <span class="user__name">Jamie</span>
+                            -->
+                            <div class="icon cloudy">
+                                <div class="cloud"></div>
+                                <div class="cloud"></div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <div id="section__content3" class="section__content">
+                    <ul class="boxgrid">
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--weather">
+                                <p id="temp3"><span class="text--large">30°C</span><br />Sunny
+                                </p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--description">
+                                <p id="description3" class="text--large"></p>
+                                <!--<img src="https://source.unsplash.com/600x400/?art" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" id="expand" class="box box--cost">
+                                <!--<img src="https://source.unsplash.com/300x300/?art" class="box__img" alt="" />-->
+                                <p><span id="pressure3" class="text--large"></span><br />Pressure</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--uvi">
+                                <!--<img src="https://source.unsplash.com/300x300/?people" class="box__img" alt="" />-->
+                                <p id="uvi3"></p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--push">
+                            <a href="#" class="box box--locations">
+                                <p><span id="wind3" class="text--large"></span><br />Wind speed</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item">
+                            <a href="#" class="box box--humid">
+                                <p><span id="humid3" class="text--large"></span><br />Humidity</p>
+                            </a>
+                        </li>
+                        <li class="boxgrid__item boxgrid__item--wide">
+                            <a href="#" class="box box--minMax">
+                                <p><span id="max-min-3" class="text--large"></span><br>Max / Min temp</p>
+                                <!--<img src="https://source.unsplash.com/300x300/?technology" class="box__img" alt="" />-->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+        </main>
+
+        <!--
+        <button class="scrollctrl scrollctrl--prev" data-scroll-dir="prev">
+            <span class="arrow arrow--large arrow--up"></span>
+        </button>
+        <button class="scrollctrl scrollctrl--next" data-scroll-dir="next">
+            <span class="arrow arrow--large arrow--down"></span>
+        </button>
+        -->
+
+        <footer class="footer">
+            <!--
+            <p>a pen by <a href="https://twitter.com/mxbck">@mxbck</a></p>
+            -->
+            <p>design and made by <a target="_blank" href="#">Varun Jajoo</a></p>
+
+            <p class="footer__more">
+                <a href="#" target="_blank" rel="noopener noreferrer">View Source</a>
+                &nbsp;&middot;&nbsp;
+                <a href="#">Read More</a>
+            </p>
+        </footer>
+    </div>
+
+
+</body>
+<script src="script.js"></script>
+
+</html>

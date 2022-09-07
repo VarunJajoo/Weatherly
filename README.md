@@ -1,7 +1,7 @@
 # Weatherly | Weather app with a beautiful UI
 
 ### View it live at 
-http://vaibhavsharma.tech/weatherly.html
+https://varunjajoo.netlify.app/
 
 ### API Info
 * Method: `GET`
